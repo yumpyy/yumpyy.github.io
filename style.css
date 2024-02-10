@@ -1,0 +1,14 @@
+body {
+  margin: 2em 20%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  background-size: contain;
+}
+
+nav, ul, li {
+  display: inline;
+  padding-right: 1em;
+}
