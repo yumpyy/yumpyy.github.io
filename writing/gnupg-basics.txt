@@ -1,0 +1,21 @@
+# keygen
+gpg --gen-key
+
+# show keys
+gpg --list-keys
+
+# export public key
+- binary file key
+gpg --export <mail> --output gpg.gpg
+
+- ascii key
+gpg --armor --export <mail>
+
+# import public key
+gpg --import keyfile.gpg
+
+# encrypt/decrypt files
+- encrypt
+gpg --encrypt --recipient <email>
+
+gpg --decrypt --recipient <email>

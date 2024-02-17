@@ -1,0 +1,12 @@
+modkey = "ctrl+b"
+
+----------------------------------------------
+what it does 		| 	command w/ mod
+----------------------------------------------
+new shell 		| c
+next shell		| n
+prev shell		| p
+move to shell no.	| $num
+close shell		| x
+copy mode		| [
+paste			| ]

@@ -12,3 +12,9 @@ nav, ul, li {
   display: inline;
   padding-right: 1em;
 }
+
+@media screen and (max-width: 800px) {
+  body {
+    margin: 5px 10px;
+  }
+}
