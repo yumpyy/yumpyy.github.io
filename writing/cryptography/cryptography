@@ -1,0 +1,20 @@
+"
+- date : 02/19/2024
+- topic : cryptography
+"
+
+1.1 Introduction
+
+Cryptography has existed for more than 4000 years, used by Egyptians[1]. It was used as a tool to protect national secrets and strategies.
+
+In the modern day, the demand of cryptography started during 1960s when the
+private sector needed a way to protect their information digitally. 
+
+In 1977, D.E.S ( Data Encryption Standard ) was adopted for encrypting unclassified data. 
+    - Most well known cryptographic mechanism in histroy.
+    - Key length : 56 bits ( Too insecure for modern world )
+
+
+================================================================
+1. Mention of cryptography used by Egyptians some 4k years ago in Kahn's The
+Codebreakers book. (https://en.wikipedia.org/wiki/The_Codebreakers)

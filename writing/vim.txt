@@ -22,6 +22,7 @@ I,A             insert start, end of line
 r               replace a character
 R               start replacing all characters from cursor pos.
 cw              replace a word
+cc              replace a line
 
 - delete
 x               delete character
