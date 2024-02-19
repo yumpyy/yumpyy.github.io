@@ -1,0 +1,55 @@
+CheatSheet for vi/vim/neovim
+==================================
+
+Movement
+--------
+
+h,j,k,l         left, down, up, right
+e               move forward word by word
+w,b             move backward word by word
+0,$             home, end keys
+gg              top of file
+G               end of file
+
+Editing
+-------
+
+- insert
+i,a             insert before,after
+I,A             insert start, end of line
+
+- replace
+r               replace a character
+R               start replacing all characters from cursor pos.
+cw              replace a word
+
+- delete
+x               delete character
+daw             delete a word
+dd              delete line
+
+- paste/yank
+p               paste
+yaw             yank a word
+yy              yank line
+
+- visual mode
+ve              jump words while in visual
+V               visual a line
+Vy              copy a line
+^VI/A           multi cursor
+
+- misc
+u               undo
+^R              redo
+J               join 2 lines
+
+
+Commands
+--------
+
+:set nu/nu!     toggle line number
+:sp             horizontal split
+:vsp            vertical split
+:e              edit a file
+:!              shell command
