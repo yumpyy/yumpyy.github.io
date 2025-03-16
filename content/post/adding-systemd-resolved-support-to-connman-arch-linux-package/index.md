@@ -16,7 +16,6 @@ links:
 tags: 
     - linux
 categories:
-    - guide
     - linux
 keywords:
     - Arch Linux connman systemd-resolved
