@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on yumpyy's corner</title><link>https://eeper.me/tags/linux/</link><description>Recent content in Linux on yumpyy's corner</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 03 Sep 2024 00:00:00 +0530</lastBuildDate><atom:link href="https://eeper.me/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Adding systemd-resolved Support to Connman</title><link>https://eeper.me/writing/adding-systemd-resolved-support-to-connman/</link><pubDate>Tue, 03 Sep 2024 00:00:00 +0530</pubDate><guid>https://eeper.me/writing/adding-systemd-resolved-support-to-connman/</guid><description>&lt;p>This is a quick guide to enable &lt;code>systemd-resolved&lt;/code> support for &lt;code>connman&lt;/code> package in arch because arch wiki being arch wiki, it RTFMed the reader with no futher explanation on how to actually rebuild this package.&lt;/p>
+&lt;h2 id="prerequisites">Prerequisites
+&lt;/h2>&lt;p>Install a few packages before we start rebuilding.
+These are the required dependencies as per connman&amp;rsquo;s &lt;a class="link" href="https://gitlab.archlinux.org/archlinux/packaging/packages/connman/-/blob/main/PKGBUILD?ref_type=heads#L22" target="_blank" rel="noopener"
+>PKGBUILD&lt;/a>.&lt;/p>
+&lt;ul>
+&lt;li>base-devel&lt;/li>
+&lt;li>devtools&lt;/li>
+&lt;li>bluez&lt;/li>
+&lt;li>iwd&lt;/li>
+&lt;li>openconnect&lt;/li>
+&lt;li>openvpn&lt;/li>
+&lt;li>ppp&lt;/li>
+&lt;li>wpa_supplicant&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://man.archlinux.org/man/devtools.7.en" target="_blank" rel="noopener"
+>devtools&lt;/a> is required as well since it has the tools for rebuilding the package.&lt;/p>&lt;/blockquote>
+&lt;p>Command for installing:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">pacman&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="n">bluez&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">iwd&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">openconnect&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">openvpn&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ppp&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">wpa_supplicant&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">devtools&lt;/span> \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">base&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">devel&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="re-building-the-package">Re-Building the Package
+&lt;/h2>&lt;p>First, We need to get the source files of connman package from arch&amp;rsquo;s gitlab.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">pkgctl repo clone --protocol=https connman
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cd connman
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Now, Open up PKGBUILD and modify it to add &lt;code>--with-dns-backend=systemd-resolved&lt;/code> option.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">...
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">build&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">cd&lt;/span> &lt;span class="nv">$pkgname&lt;/span>-&lt;span class="nv">$pkgver&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ./configure &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --prefix&lt;span class="o">=&lt;/span>/usr &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> ...
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --with-dns-backend&lt;span class="o">=&lt;/span>systemd-resolved
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ...
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --enable-pie &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --enable-iwd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> make
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">...
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Write the changes and re-build the package.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">makepkg --syncdeps --rmdeps
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>&lt;code>--syncdeps&lt;/code>&lt;/strong>: Installs required dependencies. &lt;br>
+&lt;strong>&lt;code>--rmdeps&lt;/code>&lt;/strong>: Removes make dependencies after building, which are not needed.&lt;/p>
+&lt;p>ps. If &lt;code>makepkg&lt;/code> fails due to PGP key not being verified, you can pass &lt;code>--skippgpcheck&lt;/code> flag to the command.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">==&amp;gt; ERROR: One or more PGP signatures could not be verified!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ makepkg --syncdeps --skippgpcheck
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="installing-the-modified-version">Installing the Modified Version
+&lt;/h2>&lt;p>Once the building process is complete, a package file (connman-pkgver.pkg.tar.zst) will be created in the working directory.&lt;/p>
+&lt;p>To install it, use makepkg&amp;rsquo;s &lt;code>-i&lt;/code> flag&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">makepkg --install
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="final-setup">Final setup
+&lt;/h2>&lt;p>After installing the modified package, setup the stub resolver as &lt;code>/etc/resolv.conf&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">ln -sf ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Then, Restart &lt;code>connman.service&lt;/code>, &lt;code>systemd-resolved.service&lt;/code> and (if you&amp;rsquo;re using it) &lt;code>tailscale.service&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo systemctl restart connman.service
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl restart systemd-resolved.service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>That&amp;rsquo;s it. :)&lt;/p></description></item></channel></rss>
