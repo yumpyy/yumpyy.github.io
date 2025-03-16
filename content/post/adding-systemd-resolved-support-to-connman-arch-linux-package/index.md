@@ -7,7 +7,7 @@ math:
 license: 
 hidden: false
 comments: false
-draft: true
+draft: false
 links:
   - title: GitHub
     description: My personal projects and fun things I tinker with.
