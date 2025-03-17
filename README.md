@@ -1,3 +1,3 @@
 # site
 
-using [stack] hugo theme.
+using [stack](https://github.com/CaiJimmy/hugo-theme-stack) hugo theme.
