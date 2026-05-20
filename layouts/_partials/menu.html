@@ -1,0 +1,43 @@
+{{- $page := .page }}
+{{- $menuID := .menuID }}
+
+{{- with index site.Menus $menuID }}
+  <nav aria-label="breadcrumb" class="small">
+    <ol class="breadcrumb fw-bold flex-row flex-wrap">
+      {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+    </ol>
+  </nav>
+{{- end }}
+
+{{- define "partials/inline/menu/walk.html" }}
+  {{- $page := .page }}
+  {{- range .menuEntries }}
+    {{- $attrs := dict "href" .URL }}
+    {{- if $page.IsMenuCurrent .Menu . }}
+      {{- $attrs = merge $attrs (dict "class" "active" "aria-current" "page") }}
+    {{- else if $page.HasMenuCurrent .Menu .}}
+      {{- $attrs = merge $attrs (dict "class" "ancestor" "aria-current" "true") }}
+    {{- end }}
+    {{- $name := .Name }}
+    {{- with .Identifier }}
+      {{- with T . }}
+        {{- $name = . }}
+      {{- end }}
+    {{- end }}
+    <li class="breadcrumb-item my-1 my-md-0 ms-3 ms-md-0">
+      <a
+        {{- range $k, $v := $attrs }}
+          {{- with $v }}
+            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+          {{- end }}
+        {{- end -}}
+        {{- if or ($page.IsMenuCurrent .Menu .) (eq $page.RelPermalink .URL) (eq $page.Section .Identifier) }}
+        class="text-decoration-underline link-offset-3"
+        {{- end }}
+        {{ if strings.HasPrefix .URL "http" }}
+          target="_blank" rel="noopener noreferrer"
+        {{ end }}
+      >{{ $name }}</a>
+    </li>
+  {{- end }}
+{{- end }}
