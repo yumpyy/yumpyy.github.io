@@ -5,6 +5,6 @@ draft: false
 ---
 
 - [GitHub](https://github.com/yumpyy)
-- [Hugging Face](https://huggingface.co/yumpyy)
-- [Twitter / X](https://x.com/yumpyy)
-- [LinkedIn](https://linkedin.com/in/yumpyy)
+- [Hugging Face](https://huggingface.co/yenupam)
+- [Twitter / X](https://x.com/yenupam)
+- [LinkedIn](https://linkedin.com/in/anupamrr)
