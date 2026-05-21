@@ -4,10 +4,15 @@ date = 2024-01-01T00:00:00+00:00
 draft = false
 +++
 
-I'm haspper, a 18 year old human in flesh who is stuck inside an endless loop of life.
-
-I'm a huge sucker for gnu/linux, foss, small web, and minimalism.
-
-Apart from technical things, in my free time I consume old content for the sake of experiencing fake nostalgia. That includes watching movies, shows from 80s-90s, reading popular magazines like byte and much more stuff.
-
-I love programming as well, though I don't have any *real* project(s) to show off currently. I have just written small programs and tools that I use on a daily basis. You can find them at my [GitHub](https://github.com/yumpyy) profile.
+i'm **_anupam/अनुपम_**. a builder and oss generative ai enthusisast. \
+\
+i have been on the ai band wagon since the inital gpt-3 and dall-e release era.\
+my first interaction with oss ai was when i built voice assistant with tool support (tool calls didnt exist back then.) for playing music, web search, and much more features. used whisper + [GPT4All](https://docs.gpt4all.io/index.html) + stt pipeline.
+\
+\
+ever since then, i have built multiple ai wrappers during my school then slowly shifted to agentic ai during 100x hackathon in 2024 and then finally switched to bulding [open source models/datasets](https://huggingface.co/yenupam/). focusing on research area more.
+\
+\
+my current upcoming projects:
+- [speech-to-speech model: oss first of its kind with tool call support]()
+- [neural binary streaming proctol]()
