@@ -50,10 +50,10 @@ With a single search, I found a list of cool FOSS apps for Android TV. [Here](ht
 Here's the list of apps I chose:
 - **[LTvLauncher](https://github.com/LeanBitLab/LtvLauncher):** For replacing the current launcher. Clean and customizable UI. Works for me.
 - **[KeyMapper](https://github.com/keymapperorg/KeyMapper):** For remapping the home button to LTvLauncher.
+- **[SmartTube](https://github.com/yuliskov/smarttube):** YouTube client.
 - **Stremio:** For streaming movies and shows from a media hub.
 - **Play Store:** Replaced Aptoide.
 - **Chrome:** Replaced the custom Android WebView browser.
-- **[SmartTube](https://github.com/yuliskov/smarttube):** YouTube client.
 
 ## Transferring and Downloading Apps to the Projector
 Placed everything in my share folder and started the HTTP server.
@@ -74,9 +74,9 @@ Now, go to `IP:PORT` on your browser. (In my case, it is `10.115.90.1:8000`)
 You will see a list like this. Click on the APK(s) to download them.
 {{< img src="./chrome-python-http-server.png" w="600" title="HTTP server page">}}
 
-Voilà! Everything is downloaded.\
+Voila! Everything is downloaded.\
 I went ahead and set up everything. Remapped the home button, set up Stremio, SmartTube, and customized the launcher.
 
 # Conclusion
-It doesn't matter how locked down a device is or how old it is — there's always a way to upcycle it.\
+It doesn't matter how locked down a device is or how old it is, there's always a way to upcycle it.\
 In my case, the fix was easy. I just had to install APKs via a simple HTTP server instead of ADB, and replace the launcher so I could access stock Android settings.
