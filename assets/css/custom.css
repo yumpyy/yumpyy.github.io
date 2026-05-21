@@ -1,3 +1,20 @@
 .breadcrumb {
   flex-direction: row !important;
 }
+
+article figure {
+  text-align: center;
+}
+
+article figure img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+article figure figcaption {
+  color: #6b7280;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-family: 'Red Hat Mono', monospace;
+}

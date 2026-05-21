@@ -1,0 +1,16 @@
+{{- $src := .Get "src" -}}
+{{- $width := .Get "w" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $title := .Get "title" -}}
+{{- $class := .Get "class" -}}
+{{- $img := .Page.Resources.Get $src | default (.Page.Resources.GetMatch $src) -}}
+{{- if not $img -}}
+  {{- errorf "Image %q not found in page resources" $src -}}
+{{- end -}}
+{{- $processed := $img.Resize (printf "%sx" $width) -}}
+<figure{{ with $class }} class="{{ . }}"{{ end }}>
+  <img src="{{ $processed.RelPermalink }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" alt="{{ $alt }}">
+  {{- with $title -}}
+  <figcaption>{{ . }}</figcaption>
+  {{- end -}}
+</figure>
