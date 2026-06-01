@@ -14,7 +14,7 @@
 {{ partial "twitter_cards.html" . }}
 <title>{{ $title }}</title>
 <script type="application/ld+json">
-{
+[{
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "{{ .Site.Params.author }}",
@@ -23,18 +23,14 @@
     "https://github.com/yumpyy",
     "https://huggingface.co/yenupam"
   ]
-}
-{{- if not .IsHome }}
-,
-{
+}{{ if not .IsHome }},{
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": {{ .Title | jsonify }},
   "description": {{ $desc | jsonify }},
   "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" },
   "url": "{{ .Permalink }}"
-}
-{{- end }}
+}{{ end }}]
 </script>
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
