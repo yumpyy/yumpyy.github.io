@@ -1,0 +1,227 @@
+{{ $images := .Params }}
+{{ $processed := slice }}
+{{ range $images }}
+  {{ $src := . }}
+  {{ $lookup := strings.TrimPrefix "./" . }}
+  {{ $resource := $.Page.Resources.GetMatch $lookup }}
+  {{ if and $resource (eq $resource.MediaType.MainType "image") }}
+    {{ $resized := $resource.Resize "1200x" }}
+    {{ if $resized }}{{ $src = $resized.RelPermalink }}{{ end }}
+  {{ end }}
+  {{ $processed = $processed | append $src }}
+{{ end }}
+{{ $id := delimit (shuffle (seq 1 9)) "" }}
+
+<div class="hugo-gallery" id="gallery-{{ $id }}" data-images="{{ jsonify $processed }}" data-index="0">
+  <div class="hg-main-view">
+    <img src="{{ index $processed 0 }}" alt="Gallery Image" class="hg-current-image" loading="lazy">
+  </div>
+
+  <div class="hg-controls">
+    <button class="hg-btn hg-prev" aria-label="Previous Image">◄─── prev</button>
+    <span class="hg-counter">1 / {{ len $images }}</span>
+    <button class="hg-btn hg-next" aria-label="Next Image">next ────►</button>
+  </div>
+
+  <div class="hg-lightbox">
+    <button class="hg-lightbox-close" aria-label="Close Lightbox">&times;</button>
+    <button class="hg-lightbox-btn hg-lightbox-prev">&#10094;</button>
+    <img class="hg-lightbox-content" src="" alt="Zoomed Gallery Image">
+    <button class="hg-lightbox-btn hg-lightbox-next">&#10095;</button>
+  </div>
+</div>
+
+{{ if not (.Page.Scratch.Get "galleryLoaded") }}
+  {{ .Page.Scratch.Set "galleryLoaded" true }}
+  <style>
+    .hugo-gallery {
+      margin: 2.5rem 0;
+      width: 100%;
+    }
+
+    .hg-main-view {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #eaebed;
+      cursor: zoom-in;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .hg-current-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+
+    .hg-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 13px;
+      color: var(--font-color, #222);
+    }
+
+    .hg-btn {
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      opacity: 0.7;
+      transition: color 0.15s, opacity 0.15s;
+    }
+
+    .hg-btn:hover {
+      color: #e55b64;
+      opacity: 1;
+    }
+
+    .hg-counter {
+      opacity: 0.5;
+      font-size: 12px;
+    }
+
+    .hg-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(12, 14, 16, 0.95);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .hg-lightbox.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .hg-lightbox-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    .hg-lightbox-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 20px;
+      transition: color 0.2s;
+    }
+
+    .hg-lightbox-btn:hover {
+      color: white;
+    }
+
+    .hg-lightbox-prev { left: 2%; }
+    .hg-lightbox-next { right: 2%; }
+
+    .hg-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 3rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    .hg-lightbox-close:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 720px) {
+      .hg-lightbox-btn { font-size: 2rem; padding: 10px; }
+      .hg-lightbox-prev { left: 0; }
+      .hg-lightbox-next { right: 0; }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const galleries = document.querySelectorAll('.hugo-gallery');
+
+      galleries.forEach(gallery => {
+        const images = JSON.parse(gallery.getAttribute('data-images'));
+        let currentIndex = 0;
+
+        const mainImg = gallery.querySelector('.hg-current-image');
+        const mainView = gallery.querySelector('.hg-main-view');
+        const btnPrev = gallery.querySelector('.hg-prev');
+        const btnNext = gallery.querySelector('.hg-next');
+        const counter = gallery.querySelector('.hg-counter');
+
+        const lightbox = gallery.querySelector('.hg-lightbox');
+        const lbImg = gallery.querySelector('.hg-lightbox-content');
+        const lbClose = gallery.querySelector('.hg-lightbox-close');
+        const lbPrev = gallery.querySelector('.hg-lightbox-prev');
+        const lbNext = gallery.querySelector('.hg-lightbox-next');
+
+        const updateGallery = (index) => {
+          currentIndex = (index + images.length) % images.length;
+          const src = images[currentIndex];
+          mainImg.src = src;
+          if(lbImg) lbImg.src = src;
+          counter.textContent = `${currentIndex + 1} / ${images.length}`;
+        };
+
+        btnPrev.addEventListener('click', () => updateGallery(currentIndex - 1));
+        btnNext.addEventListener('click', () => updateGallery(currentIndex + 1));
+
+        mainView.addEventListener('click', () => {
+          lbImg.src = images[currentIndex];
+          lightbox.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        });
+
+        const closeLightbox = () => {
+          lightbox.classList.remove('show');
+          document.body.style.overflow = '';
+        };
+
+        lbClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) closeLightbox();
+        });
+
+        lbPrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          updateGallery(currentIndex - 1);
+        });
+
+        lbNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          updateGallery(currentIndex + 1);
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (!lightbox.classList.contains('show')) return;
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') updateGallery(currentIndex - 1);
+          if (e.key === 'ArrowRight') updateGallery(currentIndex + 1);
+        });
+      });
+    });
+  </script>
+{{ end }}

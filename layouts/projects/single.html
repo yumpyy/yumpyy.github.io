@@ -1,0 +1,52 @@
+{{ define "main" }}
+<div class="container pt-5">
+  <div class="row mt-5 pt-5">
+    {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+  </div>
+
+  {{ $css := resources.Get "css/projects.css" | minify }}
+<style>{{ $css.Content | safeCSS }}</style>
+
+  {{ $iconGithub := (resources.Get "icons/github.svg").Content | safeHTML }}
+  {{ $iconHuggingFace := (resources.Get "icons/huggingface.svg").Content | safeHTML }}
+  {{ $iconMisc := (resources.Get "icons/misc.svg").Content | safeHTML }}
+  {{ $iconPaper := (resources.Get "icons/paper.svg").Content | safeHTML }}
+
+  <article class="proj-single">
+    <h1 class="proj-single-title">{{ .Title }}</h1>
+    <p class="proj-single-desc">{{ .Params.description }}</p>
+
+    {{ if .Params.image }}
+      {{ $img := .Resources.GetMatch .Params.image }}
+      <figure class="proj-single-figure">
+        <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .Params.image }}{{ end }}" alt="{{ .Title }}">
+      </figure>
+    {{ end }}
+
+    {{ if .Params.links }}
+      <div class="proj-single-links">
+        {{ with .Params.links.github }}
+          <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="GitHub">{{ $iconGithub }}</a>
+        {{ end }}
+        {{ with .Params.links.huggingface }}
+          <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Hugging Face">{{ $iconHuggingFace }}</a>
+        {{ end }}
+        {{ with .Params.links.misc }}
+          <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="External link">{{ $iconMisc }}</a>
+        {{ end }}
+        {{ with .Params.links.paper }}
+          <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Paper">{{ $iconPaper }}</a>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <div class="proj-single-content">
+      {{ .Content }}
+    </div>
+
+  </article>
+</div>
+<footer>
+  {{ partial "footer.html" . }}
+</footer>
+{{ end }}

@@ -2,18 +2,28 @@ baseURL = "https://yenupam.com/"
 languageCode = "en-us"
 title = "yenupam"
 theme = "not-much"
-copyright = "© {year}"
+copyright = "© Anupam Roy"
+enableRobotsTXT = true
+
 [markup]
   [markup.highlight]
     style = 'dracula'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
+
 [params]
   theme = "light"
   palette = "default"
   showThemeNotice = false
   showPostsSummary = true
+  description = "i've been breaking and building things since gpt-3. ai, linux, old hardware..."
+  author = "Anupam Roy"
+
 [caches]
   [caches.images]
     dir = ':cacheDir/images'

@@ -1,0 +1,97 @@
+{{ define "main" }}
+<div class="container pt-5">
+  <div class="row mt-5 pt-5">
+    {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+  </div>
+
+  {{ $css := resources.Get "css/projects.css" | minify }}
+<style>{{ $css.Content | safeCSS }}</style>
+
+  {{ $iconGithub := (resources.Get "icons/github.svg").Content | safeHTML }}
+  {{ $iconHuggingFace := (resources.Get "icons/huggingface.svg").Content | safeHTML }}
+  {{ $iconMisc := (resources.Get "icons/misc.svg").Content | safeHTML }}
+  {{ $iconPaper := (resources.Get "icons/paper.svg").Content | safeHTML }}
+
+  <h1 class="text-uppercase">{{ .Title }}</h1>
+  {{ .Content }}
+
+  {{ $projects := where .Site.RegularPages "Section" "projects" }}
+
+  {{/* Collect unique categories with minimum order */}}
+  {{ $catMap := dict }}
+  {{ range $projects }}
+    {{ $cat := .Params.category }}
+    {{ $order := .Params.category_order | default 999 | int }}
+    {{ if $cat }}
+      {{ if isset $catMap $cat }}
+        {{ $existing := index $catMap $cat }}
+        {{ if lt $order $existing }}
+          {{ $catMap = merge $catMap (dict $cat $order) }}
+        {{ end }}
+      {{ else }}
+        {{ $catMap = merge $catMap (dict $cat $order) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{/* Build sortable list (tiebreak by category name) */}}
+  {{ $catList := slice }}
+  {{ range $cat, $order := $catMap }}
+    {{ $key := printf "%04d-%s" $order $cat }}
+    {{ $catList = $catList | append (dict "key" $key "cat" $cat) }}
+  {{ end }}
+  {{ $catList = sort $catList "key" "asc" }}
+
+  {{ range $catList }}
+    {{ $cat := .cat }}
+    {{ $catProjects := where $.Site.RegularPages "Params.category" $cat }}
+    <section class="proj-category-row">
+      <div class="proj-category-label">
+        <span class="proj-category-text">{{ $cat }}</span>
+        <span class="proj-category-line" aria-hidden="true"></span>
+      </div>
+      <div class="proj-cards-grid">
+        {{ range $catProjects }}
+        <div class="proj-card">
+
+          <a href="{{ .RelPermalink }}" class="proj-card-overlay" aria-label="{{ .Title }}"></a>
+
+          <div class="proj-card-image">
+            {{ if .Params.image }}
+              {{ $img := .Resources.GetMatch .Params.image }}
+              <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .Params.image }}{{ end }}" alt="{{ .Title }}" loading="lazy">
+            {{ else }}
+              <div class="proj-card-image-placeholder" aria-hidden="true"></div>
+            {{ end }}
+          </div>
+
+          <div class="proj-card-body">
+
+            <div class="proj-card-content">
+              <h3 class="proj-card-title">{{ .Title }}</h3>
+              <p class="proj-card-desc">{{ .Params.description }}</p>
+            </div>
+
+            <div class="proj-card-links">
+              {{ with .Params.links.github }}
+                <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="GitHub">{{ $iconGithub }}</a>
+              {{ end }}
+              {{ with .Params.links.huggingface }}
+                <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Hugging Face">{{ $iconHuggingFace }}</a>
+              {{ end }}
+              {{ with .Params.links.misc }}
+                <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="External link">{{ $iconMisc }}</a>
+              {{ end }}
+              {{ with .Params.links.paper }}
+                <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Paper">{{ $iconPaper }}</a>
+              {{ end }}
+            </div>
+
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+</div>
+{{ end }}
