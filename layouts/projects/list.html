@@ -60,7 +60,12 @@
           <div class="proj-card-image">
             {{ if $page.Params.image }}
               {{ $img := $page.Resources.GetMatch $page.Params.image }}
-              <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ $page.Params.image }}{{ end }}" alt="{{ $page.Title }}" loading="lazy">
+              {{ if and $img (eq $img.MediaType.MainType "image") }}
+                {{ $resized := $img.Resize "600x" }}
+                <img src="{{ $resized.RelPermalink }}" alt="{{ $page.Title }}" loading="lazy">
+              {{ else }}
+                <img src="{{ $page.Params.image }}" alt="{{ $page.Title }}" loading="lazy">
+              {{ end }}
             {{ else }}
               <div class="proj-card-image-placeholder" aria-hidden="true"></div>
             {{ end }}

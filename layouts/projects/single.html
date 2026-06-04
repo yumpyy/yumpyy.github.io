@@ -18,8 +18,13 @@
 
     {{ if .Params.image }}
       {{ $img := .Resources.GetMatch .Params.image }}
+      {{ $imgSrc := .Params.image }}
+      {{ if and $img (eq $img.MediaType.MainType "image") }}
+        {{ $resized := $img.Resize "1200x" }}
+        {{ $imgSrc = $resized.RelPermalink }}
+      {{ end }}
       <figure class="proj-single-figure">
-        <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .Params.image }}{{ end }}" alt="{{ .Title }}">
+        <img src="{{ $imgSrc }}" alt="{{ .Title }}">
       </figure>
     {{ end }}
 
