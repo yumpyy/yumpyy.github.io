@@ -83,7 +83,8 @@
                 <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="External link">{{ $iconMisc }}</a>
               {{ end }}
               {{ with .Params.links.paper }}
-                <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Paper">{{ $iconPaper }}</a>
+                {{ $paper := $.Resources.GetMatch (strings.TrimPrefix "./" .) }}
+                <a href="{{ with $paper }}{{ .RelPermalink }}{{ else }}{{ . }}{{ end }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Paper">{{ $iconPaper }}</a>
               {{ end }}
             </div>
 
