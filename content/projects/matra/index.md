@@ -8,10 +8,12 @@ date: 2026-06-01
 math: true
 links:
   github: "https://github.com/yumpyy/matra"
-  paper: "https://arxiv.org/abs/matra"
+  paper: "matra_paper.pdf"
   huggingface: "https://huggingface.co/yenupam/matra"
 draft: false
 ---
+
+**Technical report.** [Download PDF](matra_paper.pdf)
 
 ## Introducing Matra: An Efficient Script-Aware Tokenizer for Indic LLMs
 
