@@ -52,14 +52,15 @@
       </div>
       <div class="proj-cards-grid">
         {{ range $catProjects }}
+        {{ $page := . }}
         <div class="proj-card">
 
-          <a href="{{ .RelPermalink }}" class="proj-card-overlay" aria-label="{{ .Title }}"></a>
+          <a href="{{ $page.RelPermalink }}" class="proj-card-overlay" aria-label="{{ $page.Title }}"></a>
 
           <div class="proj-card-image">
-            {{ if .Params.image }}
-              {{ $img := .Resources.GetMatch .Params.image }}
-              <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .Params.image }}{{ end }}" alt="{{ .Title }}" loading="lazy">
+            {{ if $page.Params.image }}
+              {{ $img := $page.Resources.GetMatch $page.Params.image }}
+              <img src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ $page.Params.image }}{{ end }}" alt="{{ $page.Title }}" loading="lazy">
             {{ else }}
               <div class="proj-card-image-placeholder" aria-hidden="true"></div>
             {{ end }}
@@ -68,22 +69,22 @@
           <div class="proj-card-body">
 
             <div class="proj-card-content">
-              <h3 class="proj-card-title">{{ .Title }}</h3>
-              <p class="proj-card-desc">{{ .Params.description }}</p>
+              <h3 class="proj-card-title">{{ $page.Title }}</h3>
+              <p class="proj-card-desc">{{ $page.Params.description }}</p>
             </div>
 
             <div class="proj-card-links">
-              {{ with .Params.links.github }}
+              {{ with $page.Params.links.github }}
                 <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="GitHub">{{ $iconGithub }}</a>
               {{ end }}
-              {{ with .Params.links.huggingface }}
+              {{ with $page.Params.links.huggingface }}
                 <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Hugging Face">{{ $iconHuggingFace }}</a>
               {{ end }}
-              {{ with .Params.links.misc }}
+              {{ with $page.Params.links.misc }}
                 <a href="{{ . }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="External link">{{ $iconMisc }}</a>
               {{ end }}
-              {{ with .Params.links.paper }}
-                {{ $paper := $.Resources.GetMatch (strings.TrimPrefix "./" .) }}
+              {{ with $page.Params.links.paper }}
+                {{ $paper := $page.Resources.GetMatch (strings.TrimPrefix "./" .) }}
                 <a href="{{ with $paper }}{{ .RelPermalink }}{{ else }}{{ . }}{{ end }}" class="proj-link-icon" target="_blank" rel="noopener" aria-label="Paper">{{ $iconPaper }}</a>
               {{ end }}
             </div>
