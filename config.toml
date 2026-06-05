@@ -1,5 +1,5 @@
 baseURL = "https://yenupam.com/"
-languageCode = "en-us"
+locale = "en-us"
 title = "yenupam"
 theme = "not-much"
 copyright = "© Anupam Roy"

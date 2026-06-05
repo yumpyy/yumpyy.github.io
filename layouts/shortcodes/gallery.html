@@ -1,32 +1,57 @@
-{{ $images := .Params }}
-{{ $processed := slice }}
-{{ range $images }}
-  {{ $src := . }}
-  {{ $lookup := strings.TrimPrefix "./" . }}
+{{ $args := .Params }}
+{{ $items := slice }}
+{{ $len := len $args }}
+{{ range $i, $v := $args }}
+  {{ if eq (mod $i 2) 0 }}
+    {{ $src := $v }}
+    {{ $title := "" }}
+    {{ if lt (add $i 1) $len }}
+      {{ $title = index $args (add $i 1) }}
+    {{ end }}
+    {{ $items = $items | append (dict "src" $src "title" $title) }}
+  {{ end }}
+{{ end }}
+
+{{ $sources := slice }}
+{{ $titles := slice }}
+{{ range $items }}
+  {{ $src := .src }}
+  {{ $lookup := strings.TrimPrefix "./" $src }}
   {{ $resource := $.Page.Resources.GetMatch $lookup }}
   {{ if and $resource (eq $resource.MediaType.MainType "image") }}
     {{ $resized := $resource.Resize "1200x" }}
     {{ if $resized }}{{ $src = $resized.RelPermalink }}{{ end }}
   {{ end }}
-  {{ $processed = $processed | append $src }}
+  {{ $sources = $sources | append $src }}
+  {{ $titles = $titles | append .title }}
 {{ end }}
+
 {{ $id := delimit (shuffle (seq 1 9)) "" }}
 
-<div class="hugo-gallery" id="gallery-{{ $id }}" data-images="{{ jsonify $processed }}" data-index="0">
-  <div class="hg-main-view">
-    <img src="{{ index $processed 0 }}" alt="Gallery Image" class="hg-current-image" loading="lazy">
-  </div>
+<div class="hugo-gallery" id="gallery-{{ $id }}"
+     data-images="{{ jsonify $sources }}"
+     data-titles="{{ jsonify $titles }}"
+     data-index="0">
+  <figure class="hg-figure">
+    <div class="hg-main-view">
+      <img src="{{ index $sources 0 }}" alt="Gallery Image" class="hg-current-image" loading="lazy">
+    </div>
+    <figcaption class="hg-caption hg-current-caption">{{ index $titles 0 }}</figcaption>
+  </figure>
 
   <div class="hg-controls">
     <button class="hg-btn hg-prev" aria-label="Previous Image">◄─── prev</button>
-    <span class="hg-counter">1 / {{ len $images }}</span>
+    <span class="hg-counter">1 / {{ len $items }}</span>
     <button class="hg-btn hg-next" aria-label="Next Image">next ────►</button>
   </div>
 
   <div class="hg-lightbox">
     <button class="hg-lightbox-close" aria-label="Close Lightbox">&times;</button>
     <button class="hg-lightbox-btn hg-lightbox-prev">&#10094;</button>
-    <img class="hg-lightbox-content" src="" alt="Zoomed Gallery Image">
+    <figure class="hg-lightbox-figure">
+      <img class="hg-lightbox-content" src="" alt="Zoomed Gallery Image">
+      <figcaption class="hg-lightbox-caption"></figcaption>
+    </figure>
     <button class="hg-lightbox-btn hg-lightbox-next">&#10095;</button>
   </div>
 </div>
@@ -37,6 +62,11 @@
     .hugo-gallery {
       margin: 2.5rem 0;
       width: 100%;
+    }
+
+    .hg-figure {
+      margin: 0;
+      padding: 0;
     }
 
     .hg-main-view {
@@ -56,6 +86,20 @@
       max-height: 100%;
       object-fit: contain;
       transition: transform 0.2s ease;
+    }
+
+    .hg-caption {
+      margin-top: 0.6rem;
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 13px;
+      color: var(--font-color, #222);
+      opacity: 0.75;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    .hg-caption:empty {
+      display: none;
     }
 
     .hg-controls {
@@ -97,6 +141,7 @@
       background: rgba(12, 14, 16, 0.95);
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       backdrop-filter: blur(4px);
       opacity: 0;
       transition: opacity 0.2s ease;
@@ -107,11 +152,34 @@
       opacity: 1;
     }
 
-    .hg-lightbox-content {
+    .hg-lightbox-figure {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       max-width: 90vw;
       max-height: 90vh;
+    }
+
+    .hg-lightbox-content {
+      max-width: 90vw;
+      max-height: 85vh;
       object-fit: contain;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    .hg-lightbox-caption {
+      margin-top: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 14px;
+      text-align: center;
+      max-width: 80vw;
+    }
+
+    .hg-lightbox-caption:empty {
+      display: none;
     }
 
     .hg-lightbox-btn {
@@ -164,9 +232,11 @@
 
       galleries.forEach(gallery => {
         const images = JSON.parse(gallery.getAttribute('data-images'));
+        const titles = JSON.parse(gallery.getAttribute('data-titles') || '[]');
         let currentIndex = 0;
 
         const mainImg = gallery.querySelector('.hg-current-image');
+        const mainCaption = gallery.querySelector('.hg-current-caption');
         const mainView = gallery.querySelector('.hg-main-view');
         const btnPrev = gallery.querySelector('.hg-prev');
         const btnNext = gallery.querySelector('.hg-next');
@@ -174,15 +244,21 @@
 
         const lightbox = gallery.querySelector('.hg-lightbox');
         const lbImg = gallery.querySelector('.hg-lightbox-content');
+        const lbCaption = gallery.querySelector('.hg-lightbox-caption');
         const lbClose = gallery.querySelector('.hg-lightbox-close');
         const lbPrev = gallery.querySelector('.hg-lightbox-prev');
         const lbNext = gallery.querySelector('.hg-lightbox-next');
 
+        const titleFor = (i) => (titles[i] || '').trim();
+
         const updateGallery = (index) => {
           currentIndex = (index + images.length) % images.length;
           const src = images[currentIndex];
+          const title = titleFor(currentIndex);
           mainImg.src = src;
-          if(lbImg) lbImg.src = src;
+          if (mainCaption) mainCaption.textContent = title;
+          if (lbImg) lbImg.src = src;
+          if (lbCaption) lbCaption.textContent = title;
           counter.textContent = `${currentIndex + 1} / ${images.length}`;
         };
 
@@ -191,6 +267,7 @@
 
         mainView.addEventListener('click', () => {
           lbImg.src = images[currentIndex];
+          if (lbCaption) lbCaption.textContent = titleFor(currentIndex);
           lightbox.classList.add('show');
           document.body.style.overflow = 'hidden';
         });

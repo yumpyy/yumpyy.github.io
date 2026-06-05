@@ -16,7 +16,7 @@ The Desi Maximalism LoRA is a specialized text-to-image style transfer model eng
 
 ## Sample Generations
 
-{{< gallery "./bournvita.png" "./google-2.png" "./pulse.png" "./bharat-ai.png" "./lenskart.png" "./maggi.png" "./gen-2.png" "./drama-queen.png" >}}
+{{< gallery "./bournvita.png" "Bournvita retro tin packaging" "./google-2.png" "Google India ad" "./pulse.png" "Pulse candy vintage label" "./bharat-ai.png" "Bharat AI vintage poster" "./lenskart.png" "Lenskart" "./maggi.png" "Maggi noodles" "./gen-2.png" "Generation #2" "./drama-queen.png" "Drama Queen" >}}
 
 ## Model Specifications
 

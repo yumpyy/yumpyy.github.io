@@ -42,13 +42,15 @@ The following table compares Matra against leading tokenizers.
 | Tokenizer | SeqRed | NSL | BPT | Fert | 1ch% |
 | --- | --- | --- | --- | --- | --- |
 | **GPT-5** | 46.6% | 0.2154 | 5.79 | 3.71 | 42.5 |
-| **Gemini 3.5 Flash** | 53.9% | 0.1873 | 6.45 | 3.20 | 0.0 |
+| **Gemini 3.5 Flash** | 53.9% | 0.1873 | 6.45 | 3.20 | N/A **\*** |
 | **Qwen-3.6-MoE** | 34.3% | 0.2632 | 4.35 | 4.60 | 58.9 |
 | **Sarvam-105B** | 64.9% | 0.1460 | 7.34 | 2.46 | 29.3 |
 | **Sutra-v2** | 64.5% | 0.1463 | 7.26 | 2.49 | 26.1 |
 | **Matra-Custom (128K)** | **68.7%** | **0.1316** | **8.21** | **2.17** | **6.9** |
 
 Matra achieves the best aggregate fertility (2.17) and the highest Bytes-Per-Token (8.21), confirming that its tokens encode genuine syllabic and lexical units.
+
+> \* N/A: Gemini 3.5 Flash only provides total token counts and lacks the granular Token ID mapping required to accurately isolate and calculate single-character tokens.
 
 ### Rescuing Low-Resource Scripts
 
