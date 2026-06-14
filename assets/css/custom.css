@@ -22,3 +22,8 @@ article figure figcaption {
 .footer-nav {
   white-space: nowrap;
 }
+
+/* KaTeX font-display swap — prevent invisible text while fonts load */
+.katex .katex-html {
+  font-display: swap;
+}

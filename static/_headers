@@ -1,0 +1,23 @@
+# Hashed assets — cache forever (fingerprint changes on content change)
+/css/main.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/custom.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/palette/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/main.*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Non-hashed assets — moderate cache
+/images/*
+  Cache-Control: public, max-age=86400
+
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+# HTML pages — short cache, revalidate
+/*
+  Cache-Control: public, max-age=0, must-revalidate
