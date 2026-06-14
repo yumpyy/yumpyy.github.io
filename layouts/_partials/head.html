@@ -64,17 +64,17 @@
   "@type": "Article",
   "headline": {{ .Title | jsonify }},
   "description": {{ $desc | jsonify }},
-  "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" },
+  "author": { "@type": "Person", "name": "{{ .Site.Params.author }}", "url": "{{ .Site.BaseURL }}" },
   "publisher": {
     "@type": "Organization",
     "name": "{{ .Site.Title }}",
     "url": "{{ .Site.BaseURL }}"
   },
   "url": "{{ .Permalink }}",
-  "datePublished": "{{ .Date | time.Format "2006-01-02" }}",
-  "dateModified": "{{ .Lastmod | time.Format "2006-01-02" }}",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ .Permalink }}" }{{ with .Params.image }},
-  "image": "{{ . }}"{{ end }}
+  "datePublished": "{{ .Date | time.Format "2006-01-02T15:04:05-07:00" }}",
+  "dateModified": "{{ .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ .Permalink }}" }}{{ with .Params.image }},
+  {{ $img := $.Resources.GetMatch . }}{{ $imgUrl := cond (and $img (eq $img.MediaType.MainType "image")) $img.Permalink (absURL .) }}"image": "{{ $imgUrl }}"{{ end }}
 },{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
