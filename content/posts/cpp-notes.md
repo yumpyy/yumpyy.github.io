@@ -211,5 +211,7 @@ constexpr double gravity { 9.8 };  // evaluated at compile time
 
 ## Related Reading
 
-- [Connman systemd-resolved](/posts/connman-systemd-resolved/) — Linux network configuration
-- [Gemini Gemtext](/posts/gemini-gemtext/) — Alternative protocol reference
+- [Matra](/projects/matra/): Custom tokenizer for Indic languages
+- [Desi Maximalism](/projects/desi-maximalism/): Text-to-image LoRA for South Asian aesthetics
+- [Connman systemd-resolved](/posts/connman-systemd-resolved/): Linux network configuration
+- [Gemini Gemtext](/posts/gemini-gemtext/): Alternative protocol reference

@@ -59,5 +59,7 @@ eg. `> This is a quote.`
 
 ## Related Reading
 
-- [Connman systemd-resolved](/posts/connman-systemd-resolved/) — Network configuration on Arch Linux
-- [C++ Notes](/posts/cpp-notes/) — Programming fundamentals reference
+- [Matra](/projects/matra/): Custom tokenizer for Indic languages
+- [Desi Maximalism](/projects/desi-maximalism/): Text-to-image LoRA for South Asian aesthetics
+- [Connman systemd-resolved](/posts/connman-systemd-resolved/): Network configuration on Arch Linux
+- [C++ Notes](/posts/cpp-notes/): Programming fundamentals reference

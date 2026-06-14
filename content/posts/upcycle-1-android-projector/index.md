@@ -86,5 +86,7 @@ In my case, the fix was easy. I just had to install APKs via a simple HTTP serve
 
 ## Related Reading
 
+- [Matra](/projects/matra/): Custom tokenizer for Indic languages
+- [Desi Maximalism](/projects/desi-maximalism/): Text-to-image LoRA for South Asian aesthetics
 - [Connman systemd-resolved](/posts/connman-systemd-resolved/): Linux network configuration
 - [Gemini Gemtext](/posts/gemini-gemtext/): Lightweight protocol reference

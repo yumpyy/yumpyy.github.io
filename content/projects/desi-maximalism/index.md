@@ -5,6 +5,7 @@ category: "Generative AI"
 category_order: 30
 image: "drama-queen.png"
 date: 2026-06-01
+toc: true
 links:
   huggingface: "https://huggingface.co/yenupam/desi-max"
 draft: false

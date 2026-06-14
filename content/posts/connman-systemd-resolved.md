@@ -107,6 +107,7 @@ That's it. :)
 
 ## Related Reading
 
-- [C++ Notes](/posts/cpp-notes/) — Common C++ patterns and reference
-- [Gemini Gemtext](/posts/gemini-gemtext/) — Lightweight protocol for simple document publishing
-- [Upcycle #1: Android Projector](/posts/upcycle-1-android-projector/) — Reviving locked-down Android devices
+- [Matra](/projects/matra/): Custom tokenizer for Indic languages
+- [Desi Maximalism](/projects/desi-maximalism/): Text-to-image LoRA for South Asian aesthetics
+- [C++ Notes](/posts/cpp-notes/): Common C++ patterns and reference
+- [Gemini Gemtext](/posts/gemini-gemtext/): Lightweight protocol for simple document publishing

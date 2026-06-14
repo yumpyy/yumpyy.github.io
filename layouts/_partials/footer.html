@@ -1,6 +1,34 @@
 <div class="container mt-4 pb-1">
-    <p class="small opacity-75">
-        {{ replace .Site.Copyright "{year}" now.Year }}
-        // <a href="mailto:yenupam@gmail.com">yenupam@gmail.com</a>
-    </p>
+    <div class="row">
+        <div class="col-md-8">
+            <p class="small opacity-75 mb-1">
+                {{ replace .Site.Copyright "{year}" now.Year }}
+                // <a href="mailto:yenupam@gmail.com">yenupam@gmail.com</a>
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <p class="small opacity-75 mb-1 footer-nav">
+                <a href="/projects/">Projects</a> · 
+                <a href="/posts/">Posts</a> · 
+                <a href="/about/">About</a> · 
+                <a href="/links/">Links</a>
+            </p>
+        </div>
+    </div>
 </div>
+
+<script>
+document.querySelectorAll('a[href^="http"]').forEach(function(link) {
+    if (link.hostname !== window.location.hostname) {
+        link.addEventListener('click', function(e) {
+            if (typeof goatcounter !== 'undefined') {
+                goatcounter.count({
+                    path: e.target.href,
+                    title: e.target.textContent.trim(),
+                    event: true
+                });
+            }
+        });
+    }
+});
+</script>

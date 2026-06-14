@@ -46,6 +46,15 @@
       </div>
     {{ end }}
 
+    {{ if .Params.toc }}
+    <div class="toc small">
+      <p class="toc-title fw-semibold">
+        Table of Contents:
+      </p>
+      {{ .TableOfContents }}
+    </div>
+    {{ end }}
+
     <div class="proj-single-content">
       {{ .Content }}
     </div>
