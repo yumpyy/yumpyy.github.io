@@ -1,6 +1,6 @@
 ---
 title: "Matra"
-description: "A custom tokenizer algorithm that outperforms GPT-5, Gemini 3.5 Flash, Gemma-4-31B, Qwen 3.6 across 22 Indic languages, slashing sequence lengths by 70.3%."
+description: "A custom tokenizer algorithm that outperforms GPT-5, Gemini 3.5 Flash, Gemma-4-31B, Qwen 3.6 across 22 Indic languages, slashing sequence lengths by 70.3% and lowest fertility of 2.01 along with highest compression rate 8.03"
 category: "Research / GenAI"
 category_order: 10
 image: "matra.png"
