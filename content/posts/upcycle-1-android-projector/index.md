@@ -1,12 +1,15 @@
 ---
 title: "Upcycle #1: Reviving a locked-down Android projector back to life"
 date: '2026-05-21T13:52:23+05:30'
+lastmod: '2026-05-21T13:52:23+05:30'
 draft: false
 description: "Locked down with no USB or ADB access. Still sideloaded everything I needed."
 tags:
     - 'android-tv'
     - 'upcycle-series'
 ---
+
+**Android projector sideloading**: When an Android TV device lacks USB/ADB access and has a locked-down launcher, you can still install APKs by serving them from a local Python HTTP server on your laptop, then downloading them through the device's built-in browser. This method works on any Android TV device with a browser and no developer access.
 
 # Introduction
 {{< img src="./android-projector.jpg" w="600" title="Android Projector" >}}
@@ -80,3 +83,8 @@ I went ahead and set up everything. Remapped the home button, set up Stremio, Sm
 # Conclusion
 It doesn't matter how locked down a device is or how old it is, there's always a way to upcycle it.\
 In my case, the fix was easy. I just had to install APKs via a simple HTTP server instead of ADB, and replace the launcher so I could access stock Android settings.
+
+## Related Reading
+
+- [Connman systemd-resolved](/posts/connman-systemd-resolved/): Linux network configuration
+- [Gemini Gemtext](/posts/gemini-gemtext/): Lightweight protocol reference

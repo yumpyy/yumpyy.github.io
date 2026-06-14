@@ -1,0 +1,29 @@
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ .Params.description | default .Site.Params.description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+{{ with .Params.image }}
+  {{ $img := $.Resources.GetMatch . }}
+  {{ if and $img (eq $img.MediaType.MainType "image") }}
+    {{ $resized := $img.Resize "1200x" }}
+    <meta property="og:image" content="{{ $resized.Permalink }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ $.Title }}">
+  {{ else }}
+    <meta property="og:image" content="{{ absURL . }}">
+  {{ end }}
+{{ end }}
+{{ if .IsPage }}
+  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+  <meta property="article:published_time" content="{{ $dateMachine }}">
+  {{ $lastModMachine := .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}
+  {{ if and (isset .Params "lastmod") (ne $lastModMachine $dateMachine) }}
+    <meta property="article:modified_time" content="{{ $lastModMachine }}">
+  {{ end }}
+  <meta property="article:author" content="{{ .Site.Params.author }}">
+  {{ range .Params.tags }}
+    <meta property="article:tag" content="{{ . }}">
+  {{ end }}
+{{ end }}

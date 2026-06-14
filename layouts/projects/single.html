@@ -16,7 +16,7 @@
     <h1 class="proj-single-title">{{ .Title }}</h1>
     <p class="proj-single-desc">{{ .Params.description }}</p>
 
-    {{ if .Params.image }}
+    {{ if and .Params.image (not .Params.card_image_only) }}
       {{ $img := .Resources.GetMatch .Params.image }}
       {{ $imgSrc := .Params.image }}
       {{ if and $img (eq $img.MediaType.MainType "image") }}
@@ -24,7 +24,7 @@
         {{ $imgSrc = $resized.RelPermalink }}
       {{ end }}
       <figure class="proj-single-figure">
-        <img src="{{ $imgSrc }}" alt="{{ .Title }}">
+        <img src="{{ $imgSrc }}" alt="{{ .Title }}" loading="lazy">
       </figure>
     {{ end }}
 

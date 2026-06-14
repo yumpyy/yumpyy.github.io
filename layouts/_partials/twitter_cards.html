@@ -1,0 +1,14 @@
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@yenupam">
+<meta name="twitter:creator" content="@yenupam">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta name="twitter:description" content="{{ .Params.description | default .Site.Params.description }}">
+{{ with .Params.image }}
+  {{ $img := $.Resources.GetMatch . }}
+  {{ if and $img (eq $img.MediaType.MainType "image") }}
+    {{ $resized := $img.Resize "1200x" }}
+    <meta name="twitter:image" content="{{ $resized.Permalink }}">
+  {{ else }}
+    <meta name="twitter:image" content="{{ absURL . }}">
+  {{ end }}
+{{ end }}

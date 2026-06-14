@@ -1,0 +1,20 @@
+# yenupam.com
+
+## About
+AI researcher and engineer focused on generative AI, NLP, and open-source Indic language models. Creator of Matra tokenizer.
+
+## Key Pages
+- [About](https://yenupam.com/about/) — Background, experience, and upcoming projects
+- [Projects](https://yenupam.com/projects/) — AI research and open-source projects
+- [Posts](https://yenupam.com/posts/) — Technical blog posts on AI, Linux, and programming
+- [Links](https://yenupam.com/links/) — Social profiles and contact
+
+## Notable Projects
+- [Matra](https://yenupam.com/projects/matra/) — Custom tokenizer that outperforms GPT-5 across 22 Indic languages, reducing sequence lengths by 70.3%
+- [Desi Maximalism](https://yenupam.com/projects/desi-maximalism/) — Generative AI art exploring South Asian digital aesthetics
+
+## Contact
+- GitHub: https://github.com/yumpyy
+- Hugging Face: https://huggingface.co/yenupam
+- Twitter/X: https://x.com/yenupam
+- LinkedIn: https://linkedin.com/in/anupamrr

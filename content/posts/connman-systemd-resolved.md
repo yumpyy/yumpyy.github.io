@@ -1,13 +1,16 @@
 ---
 title: "Adding systemd-resolved Support to Connman"
-description: A simple guide on how to add systemd-resolved support to Arch Linux connman package.
+description: "Step-by-step guide to rebuild Arch Linux connman package with systemd-resolved DNS backend for proper DNS resolution."
 date: 2024-09-03T00:00:00+05:30
+lastmod: 2024-09-03T00:00:00+05:30
 draft: false
 tags: 
     - linux
     - arch
     - network
 ---
+
+**Connman systemd-resolved**: Connman is a lightweight network manager for Linux that lacks built-in systemd-resolved support. To enable it, you must rebuild the connman package from source with the `--with-dns-backend=systemd-resolved` configure flag. This allows connman to delegate DNS resolution to systemd-resolved, enabling features like DNS-over-TLS and per-link DNS configuration on Arch Linux.
 
 This is a quick guide to enable `systemd-resolved` support for `connman` package in arch because arch wiki being arch wiki, it RTFMed the reader with no futher explanation on how to actually rebuild this package.
 
@@ -101,3 +104,9 @@ sudo systemctl restart systemd-resolved.service
 ```
 
 That's it. :)
+
+## Related Reading
+
+- [C++ Notes](/posts/cpp-notes/) — Common C++ patterns and reference
+- [Gemini Gemtext](/posts/gemini-gemtext/) — Lightweight protocol for simple document publishing
+- [Upcycle #1: Android Projector](/posts/upcycle-1-android-projector/) — Reviving locked-down Android devices

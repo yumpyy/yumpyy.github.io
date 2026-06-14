@@ -1,10 +1,13 @@
 ---
 title: "C++ Notes"
 date: 2024-06-01
+lastmod: 2024-06-01
 draft: false
 tags: ["notes", "cpp"]
 description: "Personal notes on C++ fundamentals — statements, variables, functions, and more."
 ---
+
+**C++ fundamentals**: C++ is a statically-typed, compiled programming language that supports procedural, object-oriented, and generic programming paradigms. Key concepts include statements (instructions that cause program actions), objects (memory regions storing values), and functions (reusable units of statements). Every C++ program requires a `main()` function as its entry point.
 
 ## Build Configurations
 
@@ -205,3 +208,8 @@ static_cast<int>(ch);  // char to int
 const double pi { 3.14159 };       // compile-time constant
 constexpr double gravity { 9.8 };  // evaluated at compile time
 ```
+
+## Related Reading
+
+- [Connman systemd-resolved](/posts/connman-systemd-resolved/) — Linux network configuration
+- [Gemini Gemtext](/posts/gemini-gemtext/) — Alternative protocol reference

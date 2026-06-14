@@ -16,6 +16,38 @@
             </p>
         </div>
     </div>
+
+    {{ $projects := where .Site.RegularPages "Section" "projects" }}
+    {{ if $projects }}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2 class="h5 text-uppercase mb-3">Recent Projects</h2>
+            <ul class="list-unstyled">
+                {{ range first 3 $projects }}
+                <li class="mb-2">
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Params.description }}
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+    </div>
+    {{ end }}
+
+    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+    {{ if $posts }}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2 class="h5 text-uppercase mb-3">Latest Posts</h2>
+            <ul class="list-unstyled">
+                {{ range first 5 $posts }}
+                <li class="mb-2">
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Params.description | default .Summary | truncate 120 }}
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+    </div>
+    {{ end }}
 </div>
 <footer>
     {{ partial "footer.html" . }}
