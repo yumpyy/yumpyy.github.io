@@ -24,7 +24,7 @@
 <title>{{ $title }}</title>
 <script type="application/ld+json">
 {{ if .IsHome -}}
-[{
+{
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "{{ .Site.Params.author }}",
@@ -38,32 +38,18 @@
     "https://x.com/yenupam",
     "https://linkedin.com/in/anupamrr"
   ]
-},{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "{{ .Site.Title }}",
-  "url": "{{ .Site.BaseURL }}",
-  "description": {{ $desc | jsonify }},
-  "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" }
-}]
+}
 {{- else if .IsSection -}}
-[{
+{
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": {{ .Title | jsonify }},
   "description": {{ $desc | jsonify }},
   "url": "{{ .Permalink }}",
   "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" }
-},{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ .Site.BaseURL }}" },
-    { "@type": "ListItem", "position": 2, "name": {{ .Title | jsonify }}, "item": "{{ .Permalink }}" }
-  ]
-}]
+}
 {{- else if .IsPage -}}
-[{
+{
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": {{ .Title | jsonify }},
@@ -77,16 +63,9 @@
   "url": "{{ .Permalink }}",
   "datePublished": "{{ .Date | time.Format "2006-01-02T15:04:05-07:00" }}",
   "dateModified": "{{ .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ .Permalink }}" }}{{ with .Params.image }},
-  {{ $img := $.Resources.GetMatch . }}{{ $imgUrl := cond (and $img (eq $img.MediaType.MainType "image")) $img.Permalink (absURL .) }}"image": "{{ $imgUrl }}"{{ end }}
-},{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ .Site.BaseURL }}" },
-    { "@type": "ListItem", "position": 2, "name": {{ .Title | jsonify }}, "item": "{{ .Permalink }}" }
-  ]
-}]
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ .Permalink }}" }{{ with .Params.image }},{{/* */}}
+  "image": "{{ . }}"{{ end }}
+}
 {{- end }}
 </script>
 {{ partialCached "head/css.html" . }}
