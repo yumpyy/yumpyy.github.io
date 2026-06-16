@@ -10,10 +10,12 @@ toc: true
 card_image_only: true
 links:
   github: "https://github.com/yumpyy/matra"
-  paper: "./matra_paper.pdf"
+  paper: "./matra_paper_200k.pdf"
   huggingface: "https://huggingface.co/yenupam/matra"
 draft: false
 ---
+
+> Technical report: [matra_paper_200k.pdf](./matra_paper_200k.pdf)
 
 ## Live Demo
 > note: visit [huggingface space link](https://huggingface.co/spaces/yenupam/matra-tokenizer-visualizer) if the embed fails to load.
