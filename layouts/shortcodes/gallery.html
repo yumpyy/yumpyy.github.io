@@ -27,32 +27,40 @@
 {{ end }}
 
 {{ $id := delimit (shuffle (seq 1 9)) "" }}
+{{ $total := len $items }}
+{{ $single := eq $total 1 }}
 
-<div class="hugo-gallery" id="gallery-{{ $id }}"
+<div class="hugo-gallery{{ if $single }} hg-single{{ end }}" id="gallery-{{ $id }}"
      data-images="{{ jsonify $sources }}"
      data-titles="{{ jsonify $titles }}"
      data-index="0">
   <figure class="hg-figure">
     <div class="hg-main-view">
-      <img src="{{ index $sources 0 }}" alt="Gallery Image" class="hg-current-image" loading="lazy">
+      <img src="{{ index $sources 0 }}" alt="{{ index $titles 0 }}" class="hg-current-image" loading="lazy">
     </div>
     <figcaption class="hg-caption hg-current-caption">{{ index $titles 0 }}</figcaption>
   </figure>
 
+  {{ if not $single }}
   <div class="hg-controls">
     <button class="hg-btn hg-prev" aria-label="Previous Image">◄─── prev</button>
-    <span class="hg-counter">1 / {{ len $items }}</span>
+    <span class="hg-counter">1 / {{ $total }}</span>
     <button class="hg-btn hg-next" aria-label="Next Image">next ────►</button>
   </div>
+  {{ end }}
 
   <div class="hg-lightbox">
     <button class="hg-lightbox-close" aria-label="Close Lightbox">&times;</button>
+    {{ if not $single }}
     <button class="hg-lightbox-btn hg-lightbox-prev">&#10094;</button>
+    {{ end }}
     <figure class="hg-lightbox-figure">
       <img class="hg-lightbox-content" src="" alt="Zoomed Gallery Image">
       <figcaption class="hg-lightbox-caption"></figcaption>
     </figure>
+    {{ if not $single }}
     <button class="hg-lightbox-btn hg-lightbox-next">&#10095;</button>
+    {{ end }}
   </div>
 </div>
 
@@ -79,13 +87,17 @@
       align-items: center;
       justify-content: center;
       border: 1.5px solid rgba(0, 0, 0, 0.12);
+      transition: border-color 0.15s ease;
+    }
+
+    .hg-main-view:hover {
+      border-color: var(--primary);
     }
 
     .hg-current-image {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      transition: transform 0.2s ease;
     }
 
     .hg-caption {
@@ -100,6 +112,27 @@
 
     .hg-caption:empty {
       display: none;
+    }
+
+    /* Single image mode */
+    .hg-single .hg-main-view {
+      aspect-ratio: auto;
+      max-height: 400px;
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+      padding: 0;
+      line-height: 0;
+    }
+
+    .hg-single .hg-figure {
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .hg-single .hg-current-image {
+      max-height: 400px;
+      display: block;
     }
 
     .hg-controls {
@@ -233,14 +266,12 @@
       galleries.forEach(gallery => {
         const images = JSON.parse(gallery.getAttribute('data-images'));
         const titles = JSON.parse(gallery.getAttribute('data-titles') || '[]');
+        const isSingle = gallery.classList.contains('hg-single');
         let currentIndex = 0;
 
+        const mainView = gallery.querySelector('.hg-main-view');
         const mainImg = gallery.querySelector('.hg-current-image');
         const mainCaption = gallery.querySelector('.hg-current-caption');
-        const mainView = gallery.querySelector('.hg-main-view');
-        const btnPrev = gallery.querySelector('.hg-prev');
-        const btnNext = gallery.querySelector('.hg-next');
-        const counter = gallery.querySelector('.hg-counter');
 
         const lightbox = gallery.querySelector('.hg-lightbox');
         const lbImg = gallery.querySelector('.hg-lightbox-content');
@@ -259,44 +290,69 @@
           if (mainCaption) mainCaption.textContent = title;
           if (lbImg) lbImg.src = src;
           if (lbCaption) lbCaption.textContent = title;
-          counter.textContent = `${currentIndex + 1} / ${images.length}`;
         };
 
-        btnPrev.addEventListener('click', () => updateGallery(currentIndex - 1));
-        btnNext.addEventListener('click', () => updateGallery(currentIndex + 1));
-
-        mainView.addEventListener('click', () => {
+        const openLightbox = () => {
           lbImg.src = images[currentIndex];
           if (lbCaption) lbCaption.textContent = titleFor(currentIndex);
           lightbox.classList.add('show');
           document.body.style.overflow = 'hidden';
-        });
+          if (lbClose) lbClose.focus();
+        };
 
         const closeLightbox = () => {
           lightbox.classList.remove('show');
           document.body.style.overflow = '';
         };
 
+        if (!isSingle) {
+          const btnPrev = gallery.querySelector('.hg-prev');
+          const btnNext = gallery.querySelector('.hg-next');
+          const counter = gallery.querySelector('.hg-counter');
+
+          const updateAll = (index) => {
+            updateGallery(index);
+            counter.textContent = `${currentIndex + 1} / ${images.length}`;
+          };
+
+          btnPrev.addEventListener('click', () => updateAll(currentIndex - 1));
+          btnNext.addEventListener('click', () => updateAll(currentIndex + 1));
+          updateAll(0);
+        }
+
+        mainView.addEventListener('click', openLightbox);
+
         lbClose.addEventListener('click', closeLightbox);
         lightbox.addEventListener('click', (e) => {
           if (e.target === lightbox) closeLightbox();
         });
 
-        lbPrev.addEventListener('click', (e) => {
-          e.stopPropagation();
-          updateGallery(currentIndex - 1);
-        });
-
-        lbNext.addEventListener('click', (e) => {
-          e.stopPropagation();
-          updateGallery(currentIndex + 1);
-        });
+        if (lbPrev && lbNext) {
+          lbPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateGallery(currentIndex);
+          });
+          lbNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            updateGallery(currentIndex);
+          });
+        }
 
         document.addEventListener('keydown', (e) => {
           if (!lightbox.classList.contains('show')) return;
           if (e.key === 'Escape') closeLightbox();
-          if (e.key === 'ArrowLeft') updateGallery(currentIndex - 1);
-          if (e.key === 'ArrowRight') updateGallery(currentIndex + 1);
+          if (!isSingle) {
+            if (e.key === 'ArrowLeft') {
+              currentIndex = (currentIndex - 1 + images.length) % images.length;
+              updateGallery(currentIndex);
+            }
+            if (e.key === 'ArrowRight') {
+              currentIndex = (currentIndex + 1) % images.length;
+              updateGallery(currentIndex);
+            }
+          }
         });
       });
     });
