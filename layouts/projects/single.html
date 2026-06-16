@@ -46,13 +46,212 @@
       </div>
     {{ end }}
 
+    {{ $updatesResource := .Resources.GetMatch "updates.md" }}
+    {{ $updates := slice }}
+    {{ $hasUpdateImages := false }}
+    {{ $page := . }}
+    {{ if $updatesResource }}
+      {{ $updates = $updatesResource.Params.updates }}
+      {{ range $updates }}
+        {{ if .images }}
+          {{ $hasUpdateImages = true }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ if $updates }}
+      {{ $latest := index $updates 0 }}
+      {{ $count := len $updates }}
+      {{ $latestImages := $latest.images | default slice }}
+      {{ $latestImageCount := len $latestImages }}
+      {{ $firstThumb := "" }}
+      {{ if gt $latestImageCount 0 }}
+        {{ $firstImgPath := index $latestImages 0 }}
+        {{ $imgRes := $page.Resources.GetMatch (strings.TrimPrefix "./" $firstImgPath) }}
+        {{ if $imgRes }}
+          {{ $thumb := $imgRes.Resize "160x" }}
+          {{ $firstThumb = $thumb.RelPermalink }}
+        {{ else }}
+          {{ $firstThumb = $firstImgPath }}
+        {{ end }}
+      {{ end }}
+      <div class="proj-updates-strip" tabindex="0" role="button" aria-label="View all project updates">
+        <div class="proj-updates-strip-inner">
+          <div class="proj-updates-strip-main">
+            <span class="proj-updates-label">UPDATES</span>
+            <span class="proj-updates-latest">{{ $latest.date }} | {{ $latest.time }} {{ $latest.text }}</span>
+          </div>
+          {{ if gt $count 1 }}
+            <span class="proj-updates-more">+{{ sub $count 1 }} more</span>
+          {{ end }}
+          {{ if $firstThumb }}
+            <div class="proj-updates-thumb">
+              <img src="{{ $firstThumb }}" alt="" loading="lazy">
+              {{ if gt $latestImageCount 1 }}
+                <span class="proj-updates-thumb-badge">+{{ sub $latestImageCount 1 }}</span>
+              {{ end }}
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+
     {{ if .Params.toc }}
-    <div class="toc small">
+    <details class="toc-details mobile-only">
+      <summary class="toc-summary fw-semibold">Table of Contents</summary>
+      <div class="toc-body">
+        {{ .TableOfContents }}
+      </div>
+    </details>
+    <div class="toc desktop-only small">
       <p class="toc-title fw-semibold">
         Table of Contents:
       </p>
       {{ .TableOfContents }}
     </div>
+    {{ end }}
+
+    {{ if $updates }}
+    <div class="proj-updates-modal" id="proj-updates-modal" aria-hidden="true">
+      <div class="proj-updates-modal-backdrop"></div>
+      <div class="proj-updates-modal-content">
+        <button class="proj-updates-modal-close" aria-label="Close updates">&times;</button>
+        <div class="proj-updates-modal-header">
+          <span class="proj-updates-modal-title">Project Updates</span>
+        </div>
+        <div class="proj-updates-modal-body">
+          <ul class="proj-updates-list">
+            {{ range $updates }}
+            {{ $updateImages := .images | default slice }}
+            <li class="proj-update-item">
+              <div class="proj-update-meta">
+                <span class="proj-update-date">{{ .date }} | {{ .time }}</span>
+              </div>
+              <span class="proj-update-text">{{ .text }}</span>
+              {{ if $updateImages }}
+              <div class="proj-update-images" data-images="{{ jsonify $updateImages }}">
+                {{ range $i, $imgPath := $updateImages }}
+                  {{ $imgRes := $page.Resources.GetMatch (strings.TrimPrefix "./" $imgPath) }}
+                  {{ $thumbSrc := $imgPath }}
+                  {{ if $imgRes }}
+                    {{ $thumb := $imgRes.Resize "160x" }}
+                    {{ $thumbSrc = $thumb.RelPermalink }}
+                  {{ end }}
+                  <button class="proj-update-img-btn" data-index="{{ $i }}" aria-label="View image {{ add $i 1 }}">
+                    <img src="{{ $thumbSrc }}" alt="" loading="lazy">
+                    {{ if and (eq $i 0) (gt (len $updateImages) 1) }}
+                      <span class="proj-update-img-badge">+{{ sub (len $updateImages) 1 }}</span>
+                    {{ end }}
+                  </button>
+                {{ end }}
+              </div>
+              {{ end }}
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {{ if $hasUpdateImages }}
+    <div class="proj-update-lightbox" id="proj-update-lightbox" aria-hidden="true">
+      <div class="proj-update-lightbox-backdrop"></div>
+      <div class="proj-update-lightbox-content">
+        <button class="proj-update-lightbox-close" aria-label="Close image">&times;</button>
+        <img class="proj-update-lightbox-img" src="" alt="">
+      </div>
+    </div>
+    {{ end }}
+
+    <script>
+    (function() {
+      const strip = document.querySelector('.proj-updates-strip');
+      const modal = document.getElementById('proj-updates-modal');
+      if (!strip || !modal) return;
+      const closeBtn = modal.querySelector('.proj-updates-modal-close');
+      const backdrop = modal.querySelector('.proj-updates-modal-backdrop');
+
+      function openModal() {
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function closeModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (strip) strip.focus();
+      }
+
+      strip.addEventListener('click', openModal);
+      strip.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal();
+        }
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (backdrop) backdrop.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+          closeModal();
+        }
+      });
+
+      {{ if $hasUpdateImages }}
+      const lb = document.getElementById('proj-update-lightbox');
+      const lbImg = document.querySelector('.proj-update-lightbox-img');
+      const lbClose = document.querySelector('.proj-update-lightbox-close');
+      const lbBackdrop = document.querySelector('.proj-update-lightbox-backdrop');
+
+      function openLightbox(src) {
+        if (lbImg) lbImg.src = src;
+        lb.classList.add('show');
+        lb.setAttribute('aria-hidden', 'false');
+        if (lbClose) lbClose.focus();
+      }
+
+      function closeLightbox() {
+        lb.classList.remove('show');
+        lb.setAttribute('aria-hidden', 'true');
+        const modalOpen = modal && modal.classList.contains('show');
+        document.body.style.overflow = modalOpen ? 'hidden' : '';
+        if (modalOpen) {
+          if (closeBtn) closeBtn.focus();
+        }
+      }
+
+      if (lbClose) lbClose.addEventListener('click', closeLightbox);
+      if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
+      lb.addEventListener('click', function(e) {
+        if (e.target === lb) closeLightbox();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lb.classList.contains('show')) {
+          closeLightbox();
+        }
+      });
+
+      modal.querySelectorAll('.proj-update-img-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const container = btn.closest('.proj-update-images');
+          const images = JSON.parse(container.getAttribute('data-images'));
+          const idx = parseInt(btn.getAttribute('data-index'), 10);
+          const src = images[idx];
+          openLightbox(src);
+        });
+      });
+      {{ end }}
+    })();
+    </script>
     {{ end }}
 
     <div class="proj-single-content">

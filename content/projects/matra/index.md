@@ -17,6 +17,8 @@ draft: false
 
 > Technical report: [matra_paper_200k.pdf](./matra_paper_200k.pdf)
 
+> LLM with Matra as tokenizer is still pending. If anyone wants to help me with compute, hmu @ [e-mail](mailto:yenupam@gmail.com)
+
 ## Live Demo
 > note: visit [huggingface space link](https://huggingface.co/spaces/yenupam/matra-tokenizer-visualizer) if the embed fails to load.
 <iframe
@@ -29,6 +31,7 @@ draft: false
 # Matra: A Tokenizer Built for India's Languages
 
 **200k, 128k vocab size. 23 languages. The lowest token counts and highest compression across the board.**
+> In active development, more optimzation, tests, language specific tokenizers coming soon.
 
 Most tokenizers treat Indian languages as an afterthought, fragmented syllables and half-formed characters scattered across a vocabulary designed for English. Matra was built from the ground up to fix that. The result, benchmarked on June 15 2026 against the IN22-Gen test split at 200k tokens per language, is unambiguous: Matra produces fewer tokens, denser representations, and dramatically lower fragmentation than GPT-5, Gemini 3.5 Flash, Gemma-4-31B, Qwen-3.6-MoE, Sarvam-105B, and Sutra-v2 across all 23 scheduled languages of India.
 
@@ -79,17 +82,6 @@ This preserves base-10 alignment in right-to-left scripts and prevents the arith
 The `drop_singletons` flag removes word entries with frequency ≤ 1.0 between Pass 1 and Stage 1. Hapax legomena  -  words appearing exactly once in the corpus  -  contribute noise to merge statistics without providing generalizable patterns. Pruning them frees the merge budget for higher-frequency morphological units. Sentences containing pruned words are also filtered before Stage 2.
 
 This is mathematically defensible as a data-efficiency choice; for maximally pure results, `drop_singletons` defaults to `False`.
-
-### Pointerless State-Machine Engine
-
-Instead of Python's $O(N)$ list `pop()` shifting, sequences are stored as `array.array("i")`  -  contiguous C `int32_t` buffers  -  with two parallel linked arrays:
-
-- `prev_indices`: `p[i] = i-1` (sentinel `-1` at boundaries)
-- `next_indices`: `n[i] = i+1` (sentinel `n_j` at boundaries)
-
-When position $k$ is merged into $i$, the consumed position is tombstoned ($s[k] = -1$), `next_indices[i]` forwards to `n[k]`, and the reciprocal `prev_indices` updates at `n[k]`. The result is $O(1)$ pointer updates per merge instead of $O(N)$ element shifts.
-
-Pair positions use 64-bit packing: `packed = (seq_idx << 32) | offset`. A single machine word replaces the Python tuple, reducing per-position memory from ~56 bytes to 8 bytes.
 
 ## Resource Efficiency
 
