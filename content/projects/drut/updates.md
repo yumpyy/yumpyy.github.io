@@ -2,16 +2,15 @@
 updates:
   - date: 2026-06-16
     time: "10:00 AM"
-    text: "System architecture finalized. Target: sub-150ms latency, 2GB VRAM, multilingual, full-duplex, native tool calling."
-    images:
-      - "drut-logo.png"
+    text: "system architecture finalized. target: sub-150ms latency, 2gb vram, multilingual, full-duplex, native tool calling."
+    image: "arch.png"
   - date: 2026-06-12
     time: "5:30 PM"
-    text: "Selected SenseVoice-Small as audio encoder and JAL-Turn for turn-taking. Non-autoregressive, 0.06 RTF on mobile CPU."
+    text: "selected sensevoice-small as audio encoder and jal-turn for turn-taking instead of whisper and fastconformer. non-autoregressive, 0.06 rtf on mobile cpu and emotional detection as well."
   - date: 2026-06-08
     time: "2:45 PM"
-    text: "Settled on Qwen 3.5 2B/4B with DeltaNet v1 layers. Infinite context, linear recurrence, multi-token prediction heads."
+    text: "settled on qwen 3.5 2b/4b with deltanet v1 layers. infinite context, linear recurrence, multi-token prediction heads."
   - date: 2026-06-02
     time: "11:15 AM"
-    text: "Designed FlexiCodec output layer. 6.25-8.3 Hz dynamic frame rate. Non-autoregressive upscaler to 24 kHz."
+    text: "designed flexicodec output layer. 6.25-8.3 hz dynamic frame rate. non-autoregressive upscaler to 24 khz."
 ---

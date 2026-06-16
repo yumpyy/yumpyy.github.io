@@ -1,0 +1,227 @@
+{{ $src := .Get 0 }}
+{{ $caption := .Get 1 | default "" }}
+{{ $lookup := strings.TrimPrefix "./" $src }}
+{{ $resource := .Page.Resources.GetMatch $lookup }}
+{{ $imgSrc := $src }}
+{{ $imgSrcLarge := $src }}
+{{ if and $resource (eq $resource.MediaType.MainType "image") }}
+  {{ $resized := $resource.Resize "800x" }}
+  {{ if $resized }}{{ $imgSrc = $resized.RelPermalink }}{{ end }}
+  {{ $resizedLarge := $resource.Resize "1600x" }}
+  {{ if $resizedLarge }}{{ $imgSrcLarge = $resizedLarge.RelPermalink }}{{ end }}
+{{ end }}
+
+{{ $id := delimit (shuffle (seq 1 9)) "" }}
+
+<figure class="expandable-img" id="expandable-img-{{ $id }}" data-large="{{ $imgSrcLarge }}" data-caption="{{ $caption }}">
+  <img src="{{ $imgSrc }}" alt="{{ $caption }}" loading="lazy" class="expandable-img-thumb">
+  {{ if $caption }}
+  <figcaption class="expandable-img-caption">{{ $caption }}</figcaption>
+  {{ end }}
+</figure>
+
+{{ if not (.Page.Scratch.Get "expandableImgLoaded") }}
+  {{ .Page.Scratch.Set "expandableImgLoaded" true }}
+  <style>
+    .expandable-img {
+      margin: 1.5rem 0;
+      display: inline-block;
+      max-width: 100%;
+      cursor: zoom-in;
+      line-height: 0;
+    }
+
+    .expandable-img-thumb {
+      max-width: 100%;
+      max-height: 400px;
+      display: block;
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      transition: border-color 0.15s ease;
+    }
+
+    .expandable-img:hover .expandable-img-thumb {
+      border-color: var(--primary);
+    }
+
+    .expandable-img-caption {
+      margin-top: 0.6rem;
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 13px;
+      color: var(--font-color, #222);
+      opacity: 0.75;
+      text-align: center;
+      min-height: 1.2em;
+      line-height: 1.4;
+    }
+
+    .expandable-img-caption:empty {
+      display: none;
+    }
+
+    .expandable-img-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .expandable-img-lightbox.show {
+      display: flex;
+    }
+
+    .expandable-img-lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 14, 16, 0.95);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .expandable-img-lightbox.show .expandable-img-lightbox-backdrop {
+      opacity: 1;
+    }
+
+    .expandable-img-lightbox-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 90vw;
+      max-height: 90vh;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .expandable-img-lightbox.show .expandable-img-lightbox-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .expandable-img-lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .expandable-img-lightbox-caption {
+      margin-top: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Red Hat Mono', monospace;
+      font-size: 14px;
+      text-align: center;
+      max-width: 80vw;
+    }
+
+    .expandable-img-lightbox-caption:empty {
+      display: none;
+    }
+
+    .expandable-img-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 3rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+      z-index: 2;
+      transition: opacity 0.2s;
+    }
+
+    .expandable-img-lightbox-close:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 720px) {
+      .expandable-img-lightbox-close {
+        top: 12px;
+        right: 16px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const figures = document.querySelectorAll('.expandable-img');
+      if (!figures.length) return;
+
+      let currentFigure = null;
+      const lb = document.createElement('div');
+      lb.className = 'expandable-img-lightbox';
+      lb.setAttribute('aria-hidden', 'true');
+      lb.innerHTML = `
+        <div class="expandable-img-lightbox-backdrop"></div>
+        <div class="expandable-img-lightbox-content">
+          <img class="expandable-img-lightbox-img" src="" alt="">
+          <figcaption class="expandable-img-lightbox-caption"></figcaption>
+        </div>
+        <button class="expandable-img-lightbox-close" aria-label="Close image">&times;</button>
+      `;
+      document.body.appendChild(lb);
+
+      const lbImg = lb.querySelector('.expandable-img-lightbox-img');
+      const lbCaption = lb.querySelector('.expandable-img-lightbox-caption');
+      const lbClose = lb.querySelector('.expandable-img-lightbox-close');
+      const lbBackdrop = lb.querySelector('.expandable-img-lightbox-backdrop');
+
+      function openLightbox(figure) {
+        currentFigure = figure;
+        const src = figure.getAttribute('data-large');
+        const caption = figure.getAttribute('data-caption');
+        if (lbImg) lbImg.src = src;
+        if (lbCaption) lbCaption.textContent = caption;
+        lb.classList.add('show');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (lbClose) lbClose.focus();
+      }
+
+      function closeLightbox() {
+        lb.classList.remove('show');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (currentFigure) {
+          const thumb = currentFigure.querySelector('.expandable-img-thumb');
+          if (thumb) thumb.focus();
+        }
+      }
+
+      figures.forEach(figure => {
+        figure.addEventListener('click', () => openLightbox(figure));
+        const thumb = figure.querySelector('.expandable-img-thumb');
+        if (thumb) {
+          thumb.setAttribute('tabindex', '0');
+          thumb.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openLightbox(figure);
+            }
+          });
+        }
+      });
+
+      if (lbClose) lbClose.addEventListener('click', closeLightbox);
+      if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) closeLightbox();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lb.classList.contains('show')) {
+          closeLightbox();
+        }
+      });
+    });
+  </script>
+{{ end }}
