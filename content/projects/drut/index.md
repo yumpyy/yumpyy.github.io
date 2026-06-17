@@ -19,12 +19,8 @@ draft: false
 ## System Architecture
 
 > Interactive diagram: [open in Excalidraw](https://excalidraw.com/#json=CwPjzUReQDcjjYbpOnAPn,E95GNaDS59Nuvv91phPKxA)
-<iframe
-    src="https://excalidraw.com/#json=CwPjzUReQDcjjYbpOnAPn,E95GNaDS59Nuvv91phPKxA?embed"
-    frameborder="0"
-    width="100%"
-    height="500"
-></iframe>
+
+{{< gallery "./arch.png" "System Arch." >}}
 
 The goal is a speech to speech model that runs entirely on a phone. Not a cloud API with a thin client. The model should live on device, listening continuously, ready to respond in under 150 milliseconds. It should call tools, handle interruptions mid sentence, and work across languages. Here is the current design direction.
 
