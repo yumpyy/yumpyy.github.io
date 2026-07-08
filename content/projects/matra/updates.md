@@ -1,10 +1,13 @@
 ---
 updates:
+  - date: 2026-07-08
+    time: "10:00 AM"
+    text: "Released arXiv preprint: Matra achieves aggregate fertility 1.78, 72.5% sequence reduction, and 9.10 BPT on the MUTANT evaluation set across 24 languages. Outperforms GPT-5, Gemma-4-31B, Gemini 3.5 Flash, Qwen-3.6-MoE, Sarvam-105B, and Sutra-v2. Trains on a 16 GB CPU in 41 minutes from 10 GB of streaming data."
+    images:
+      - "matra.png"
   - date: 2026-06-15
     time: "3:45 PM"
     text: "Benchmarked against GPT-5, Gemini 3.5 Flash, and Gemma-4-31B on IN22-Gen. Matra scores lowest fertility (2.06) and highest BPT (8.90) across all 23 languages."
-    images:
-      - "matra.png"
   - date: 2026-06-10
     time: "11:20 AM"
     text: "Implemented 2-pass streaming architecture. Peak RAM drops from ~75 GB to ~5 GB on 300 MB corpus. Training now fits on a 16 GB machine."
