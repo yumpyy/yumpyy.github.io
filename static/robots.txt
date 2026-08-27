@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# AI search bots - explicitly allowed for citation
+# Explicitly allow AI search crawlers for citation and discovery
 User-agent: GPTBot
 Allow: /
 

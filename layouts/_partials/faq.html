@@ -1,0 +1,32 @@
+{{ with .Params.faq }}
+<section class="faq" aria-label="Frequently Asked Questions">
+  <h2 id="faq">Frequently Asked Questions</h2>
+  <dl>
+    {{ range . }}
+    <div class="faq-item">
+      <dt>{{ .q }}</dt>
+      <dd>{{ .a }}</dd>
+    </div>
+    {{ end }}
+  </dl>
+</section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{- $count := len . -}}
+    {{- range $i, $item := . -}}
+    {
+      "@type": "Question",
+      "name": {{ $item.q | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ $item.a | jsonify }}
+      }
+    }{{ if ne $i (sub $count 1) }},{{ end }}
+    {{- end -}}
+  ]
+}
+</script>
+{{ end }}

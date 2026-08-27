@@ -1,19 +1,20 @@
-# yenupam.com
+# yenupam.com — Anupam Roy
 
-## About
-AI researcher and engineer focused on generative AI, NLP, and open-source Indic language models. Creator of Matra tokenizer.
+Anupam Roy is an AI Engineer and Researcher building foundational Indian and Indic language models and full-duplex Speech-to-Speech systems. He created Matra, a script-aware Indic tokenizer, and Drut, an edge full-duplex Speech-to-Speech model. Open to GenAI and ML research roles.
 
 ## Key Pages
-- [About](https://yenupam.com/about/) — Background, experience, and upcoming projects
-- [Projects](https://yenupam.com/projects/) — AI research and open-source projects
+- [About](https://yenupam.com/about/) — Background, experience, and upcoming projects of Anupam Roy (AI Researcher & Engineer)
+- [Projects](https://yenupam.com/projects/) — AI research and open-source projects: Matra, Drut, Desi Maximalism
 - [Posts](https://yenupam.com/posts/) — Technical blog posts on AI, Linux, and programming
 - [Links](https://yenupam.com/links/) — Social profiles and contact
 
 ## Notable Projects
-- [Matra](https://yenupam.com/projects/matra/) — Custom tokenizer that outperforms GPT-5 across 22 Indic languages, reducing sequence lengths by 70.3%
-- [Desi Maximalism](https://yenupam.com/projects/desi-maximalism/) — Generative AI art exploring South Asian digital aesthetics
+- [Matra](https://yenupam.com/projects/matra/) — A script-aware Indic tokenizer (BPE) with global language coverage (256k vocab) and an Indic + English + code variant (200k vocab). Outperforms GPT-5, Gemini, and Sarvam on Indic benchmarks (MUTANT: 72.5% sequence reduction, 9.10 bytes/token). A foundational building block for Indian and Indic language models. arXiv preprint: https://yenupam.com/projects/matra/matra-arxiv-pre.pdf
+- [Drut](https://yenupam.com/projects/drut/) — An edge, full-duplex Speech-to-Speech model designed to run on-device with sub-150ms latency, turn-taking, and native tool calling. One of the first open-source full-duplex speech systems.
+- [Desi Maximalism](https://yenupam.com/projects/desi-maximalism/) — Generative AI art exploring South Asian digital aesthetics via a Qwen-Image LoRA.
 
 ## Contact
+- Email: mailto:yenupam@gmail.com
 - GitHub: https://github.com/yumpyy
 - Hugging Face: https://huggingface.co/yenupam
 - Twitter/X: https://x.com/yenupam

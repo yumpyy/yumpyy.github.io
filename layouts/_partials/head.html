@@ -28,16 +28,35 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "{{ .Site.Params.author }}",
-  "alternateName": ["yumpyy", "yenupam"],
+  "alternateName": ["yumpyy", "yenupam", "Yenupam", "yump", "Anupam Roy", "anupam roy"],
+  "givenName": "Anupam",
+  "familyName": "Roy",
+  "email": "mailto:yenupam@gmail.com",
   "url": "{{ .Site.BaseURL }}",
-  "jobTitle": "AI Researcher & Engineer",
-  "knowsAbout": ["Generative AI", "NLP", "Tokenizers", "Indic Languages", "Open Source"],
+  "image": "https://yenupam.com/avatar.jpg",
+  "description": "Anupam Roy is an AI Engineer and Researcher building foundational Indian and Indic language models and full-duplex Speech-to-Speech systems. Creator of Matra (https://yenupam.com/projects/matra/), a script-aware Indic tokenizer with global language coverage (256k vocab) and an Indic + English + code variant (200k vocab) that outperforms GPT-5, Gemini, and Sarvam on Indic benchmarks, and Drut (https://yenupam.com/projects/drut/), an edge full-duplex Speech-to-Speech model. Open to GenAI and ML research roles.",
+  "jobTitle": "Applied AI Researcher & Engineer",
+  "knowsAbout": ["AI Research", "Generative AI", "Multi-Agent Systems", "Foundational Indian Models", "Indic Language Models", "Indic NLP", "Tokenization", "Speech-to-Speech Models", "Full-Duplex Dialogue Models", "LLM Inference & Quantization", "Retrieval-Augmented Generation", "Open Source"],
+  "knowsLanguage": ["en", "hi", "bn"],
+  "skills": ["Python", "PyTorch", "Hugging Face", "LangGraph", "LangChain", "ChromaDB", "Qdrant", "vLLM", "llama.cpp (GGUF)", "TurboQuant", "Unsloth", "FastAPI", "Next.js", "React", "Docker", "Linux", "SQL"],
+  "award": [
+    "Finalist of the 1st 100x Buildathon (2024)",
+    "Pitched dataviz-ai (https://github.com/yumpyy/dataviz-ai) to the Global Affairs team at OpenAI and Tier 1 Indian VCs (2024)"
+  ],
+  "nationality": {
+    "@type": "Country",
+    "name": "India"
+  },
   "sameAs": [
     "https://github.com/yumpyy",
     "https://huggingface.co/yenupam",
     "https://x.com/yenupam",
     "https://linkedin.com/in/anupamrr"
-  ]
+  ],
+  "alumniOf": {
+    "@type": "EducationalOrganization",
+    "name": "Vellore Institute of Technology"
+  }
 }
 {{- else if .IsSection -}}
 {

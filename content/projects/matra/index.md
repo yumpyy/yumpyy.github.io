@@ -1,6 +1,13 @@
 ---
 title: "Matra"
 description: "A sentence-constrained superword tokenizer for Indic scripts. On the MUTANT eval set: aggregate fertility 1.78, 72.5% sequence reduction, 9.10 bytes per token. Produces 31% fewer tokens than Gemini 3.5 Flash, 62% fewer than Qwen-3.6-MoE, and 22% fewer than Sarvam-105B across 24 languages."
+faq:
+  - q: "What is an Indic tokenizer?"
+    a: "Matra is a script-aware BPE tokenizer for Indic scripts that avoids fragmenting syllables into single-character tokens, making Indic text far more token-efficient for LLMs than English-centric tokenizers."
+  - q: "How many languages does Matra support?"
+    a: "Matra has global language coverage at a 256k vocab and an Indic + English + code variant at 200k vocab, benchmarked across 24 languages (22 Indic plus English and code) on the MUTANT evaluation set."
+  - q: "How does Matra compare to GPT-5 and Sarvam?"
+    a: "On the MUTANT eval set Matra reaches 72.5% sequence reduction and 9.10 bytes per token, producing 31% fewer tokens than Gemini 3.5 Flash, 62% fewer than Qwen-3.6-MoE, and 22% fewer than Sarvam-105B."
 category: "Research / GenAI"
 category_order: 10
 image: "matra.png"

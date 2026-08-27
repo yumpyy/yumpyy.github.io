@@ -3,7 +3,7 @@ locale = "en-us"
 title = "yenupam"
 theme = "not-much"
 copyright = "© Anupam Roy"
-enableRobotsTXT = true
+enableRobotsTXT = false
 
 [markup]
   [markup.highlight]
@@ -37,25 +37,25 @@ enableRobotsTXT = true
   [[menu.main]]
     identifier = "projects"
     name = "projects"
-    url = "/projects"
+    url = "/projects/"
     weight = 2
   [[menu.main]]
     identifier = "posts"
     name = "posts"
-    url = "/posts"
+    url = "/posts/"
     weight = 3
   [[menu.main]]
     identifier = "about"
     name = "about"
-    url = "/about"
+    url = "/about/"
     weight = 4
   [[menu.main]]
     identifier = "tags"
     name = "tags"
-    url = "/tags"
+    url = "/tags/"
     weight = 5
   [[menu.main]]
     identifier = "links"
     name = "links"
-    url = "/links"
+    url = "/links/"
     weight = 6

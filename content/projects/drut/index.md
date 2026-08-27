@@ -1,6 +1,13 @@
 ---
 title: "Drut (WIP)"
 description: "An edge Speech-to-Speech model targeting sub-150ms latency, multilingual (first of its kind), full-duplex interactivity, and native tool calling."
+faq:
+  - q: "What is a full-duplex speech-to-speech model?"
+    a: "Drut is a full-duplex Speech-to-Speech model that can listen and speak at the same time with natural turn-taking, unlike half-duplex systems that wait for the user to finish before responding."
+  - q: "Can Drut run on a phone?"
+    a: "Drut is designed as an edge model intended to run on-device (for example on a phone) within a 2GB VRAM budget, with sub-150ms latency, native tool calling, and interruption handling."
+  - q: "What makes Drut different from other speech models?"
+    a: "Drut targets on-device, full-duplex interaction with turn-taking and tool calling, making it one of the first open-source full-duplex speech systems built for mobile hardware."
 image: "drut-logo.png"
 category: "Research / GenAI"
 category_order: 20

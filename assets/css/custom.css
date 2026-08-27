@@ -23,6 +23,29 @@ article figure figcaption {
   white-space: nowrap;
 }
 
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Make wide tables scroll horizontally instead of breaking page layout */
+table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Make code blocks scroll horizontally on narrow screens */
+pre, .highlight {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Ensure iframes don't overflow their container */
+iframe {
+  max-width: 100%;
+}
+
 /* KaTeX font-display swap — prevent invisible text while fonts load */
 .katex .katex-html {
   font-display: swap;
